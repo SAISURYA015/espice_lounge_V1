@@ -3,8 +3,8 @@
 import NavBar from "@/components/shared/NavBar";
 import Carousel from "@/components/shared/Carousel";
 import Footer from "../footer/page";
-import { ArrowRight, MoveRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight, MoveRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import pb from "../_lib/pb";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -21,27 +21,64 @@ const Home = () => {
     videos: [],
   });
 
-  const sliderSettings = {
-    autoplay: true,
-    dots: false,
-    infinite: true,
-    autoplaySpeed: 2500,
-    speed: 1000,
-    slidesToShow: 5, // Default for desktop
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 1 },
-      },
-    ],
-  };
+  // const sliderSettings = {
+  //   autoplay: true,
+  //   dots: false,
+  //   infinite: true,
+  //   autoplaySpeed: 2500,
+  //   speed: 1000,
+  //   // slidesToShow: 1, // Default for desktop
+  //   slidesToScroll: 1,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1024,
+  //       settings: { slidesToShow: 2 },
+  //     },
+  //     {
+  //       breakpoint: 768,
+  //       settings: { slidesToShow: 1 },
+  //     },
+  //   ],
+  // };
+
+   const sliderSettings = {
+     autoplay: true,
+     dots: false,
+     infinite: true,
+     autoplaySpeed: 2500,
+     speed: 1000,
+     // slidesToShow: 5, // Large Desktop
+     slidesToScroll: 1,
+     responsive: [
+       {
+         breakpoint: 992, // Tablet landscape
+         settings: {
+           slidesToShow: 2,
+         },
+       },
+       {
+         breakpoint: 768, // Tablet portrait
+         settings: {
+           slidesToShow: 2,
+         },
+       },
+       {
+         breakpoint: 576, // Large mobile
+         settings: {
+           slidesToShow: 1,
+         }, 
+       },
+       {
+         breakpoint: 425, // Small mobile
+         settings: {
+           slidesToShow: 1,
+         },
+       },
+     ],
+   };
 
   const [galactive, setGalactive] = useState("img");
+   const sliderRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -432,34 +469,112 @@ const Home = () => {
         </div>
 
         {galactive == "img" ? (
-          <div className="flex gap-4">
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {data.images && data.images.length > 0 ? (
-                data.images.slice(0, 8).map((image) => (
-                  <div key={image.id}>
-                    <a href={`/gallery/images?imageId=${image.id}`}>
-                      <div className="flex items-center justify-center border border-gray-300 rounded-2xl">
-                        <img
-                          className="object-cover w-full h-64 hover:scale-105"
-                          src={pb.files.getURL(image, image.image)}
-                          alt={image.name || "Brand"}
-                        />
-                      </div>
-                    </a>
+          <>
+            {/* <div className="flex gap-4">
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {data.images && data.images.length > 0 ? (
+                  data.images.slice(0, 8).map((image) => (
+                    <div key={image.id}>
+                      <a href={`/gallery/images?imageId=${image.id}`}>
+                        <div className="flex items-center justify-center border border-gray-300 rounded-2xl">
+                          <img
+                            className="object-cover w-full h-64 hover:scale-105"
+                            src={pb.files.getURL(image, image.image)}
+                            alt={image.name || "Brand"}
+                          />
+                        </div>
+                      </a>
+                    </div>
+                  ))
+                ) : (
+                  <p>Loading images...</p>
+                )}
+              </div>
+              <div className="flex items-center">
+                <a href="/gallery/images">
+                  <div className="bg-[#152768] text-white mt-2 p-2 rounded-full">
+                    <ArrowRight />
                   </div>
-                ))
-              ) : (
-                <p>Loading images...</p>
-              )}
+                </a>
+              </div>
+            </div> */}
+            {/* ✅ Desktop & Laptop View (Static Grid) */}
+            <div className="hidden lg:flex gap-6 items-center justify-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+                {data.images && data.images.length > 0 ? (
+                  data.images.slice(0, 8).map((image) => (
+                    <div key={image.id}>
+                      <a href={`/gallery/images?imageId=${image.id}`}>
+                        <div className="flex items-center justify-center border border-gray-300 rounded-2xl overflow-hidden hover:shadow-md transition-all duration-300">
+                          <img
+                            className="object-cover w-64 h-64 hover:scale-105 transition-transform duration-300"
+                            src={pb.files.getURL(image, image.image)}
+                            alt={image.name || "Brand"}
+                          />
+                        </div>
+                      </a>
+                    </div>
+                  ))
+                ) : (
+                  <p>Loading images...</p>
+                )}
+              </div>
+
+              <div className="flex items-center justify-center">
+                <a href="/gallery/images">
+                  <div className="bg-[#152768] hover:bg-[#1c358a] text-white mt-2 p-3 rounded-full shadow-md hover:scale-110 transition-transform duration-300">
+                    <ArrowRight size={28} />
+                  </div>
+                </a>
+              </div>
             </div>
-            <div className="flex items-center">
-              <a href="/gallery/images">
-                <div className="bg-[#152768] text-white mt-2 p-2 rounded-full">
-                  <ArrowRight />
-                </div>
-              </a>
+
+            {/* ✅ Mobile & Tablet View (Slider) */}
+            <div className="flex lg:hidden items-center justify-center mt-6">
+              {/* Prev Button */}
+              <button
+                onClick={() => sliderRef.current?.slickPrev()}
+                className="p-1 hover:scale-110 transition-transform"
+              >
+                <ChevronLeft size={36} className="text-black" />
+              </button>
+
+              {/* Slider */}
+              <div className="w-[85%]">
+                {!data?.images || data.images.length === 0 ? (
+                  <p className="text-center">Loading images...</p>
+                ) : (
+                  <Slider ref={sliderRef} {...sliderSettings}>
+                    {data.images.slice(0, 8).map((image) => (
+                      <div
+                        key={image.id}
+                        id={image.id}
+                        className="flex items-center justify-center"
+                      >
+                        <a href={`/gallery/images?imageId=${image.id}`}>
+                          <div className="flex items-center justify-center border border-gray-300 rounded-2xl overflow-hidden">
+                            <img
+                              src={pb.files.getURL(image, image.image)}
+                              alt="preview"
+                              className="object-cover w-80 h-64 rounded-xl hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        </a>
+                      </div>
+                    ))}
+                  </Slider>
+                )}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => sliderRef.current?.slickNext()}
+                className="p-1 hover:scale-110 transition-transform"
+              >
+                <ChevronRight size={36} className="text-black" />
+              </button>
             </div>
-          </div>
+          </>
         ) : galactive == "vid" ? (
           <>
             <div className="max-w-7xl mt-4">

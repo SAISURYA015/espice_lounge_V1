@@ -62,23 +62,90 @@ const VideosImage = ({ videoId }) => {
     );
   };
 
+  // const sliderSettings = {
+  //   autoplay: true,
+  //   dots: false,
+  //   infinite: true,
+  //   autoplaySpeed: 2500,
+  //   speed: 1000,
+  //   slidesToShow: 5, // Default for desktop
+  //   slidesToScroll: 1,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1024,
+  //       settings: { slidesToShow: 2 },
+  //     },
+  //     {
+  //       breakpoint: 768,
+  //       settings: { slidesToShow: 1, slidesToShow: 3 },
+  //     },
+  //     {
+  //       breakpoint: 425,
+  //       settings: { slidesToShow: 1, slidesToShow: 1 },
+  //     },
+  //   ],
+  // };
+
+  // const sliderSettings = {
+  //   autoplay: true,
+  //   dots: false,
+  //   infinite: true,
+  //   autoplaySpeed: 2500,
+  //   speed: 1000,
+  //   slidesToShow: 5, // Large Desktop
+  //   slidesToScroll: 1,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1440, // Laptop large
+  //       settings: {
+  //         slidesToShow: 4,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 1200, // Laptop
+  //       settings: {
+  //         slidesToShow: 3,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 992, // Tablet landscape
+  //       settings: {
+  //         slidesToShow: 2,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 768, // Tablet portrait
+  //       settings: {
+  //         slidesToShow: 2,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 576, // Large mobile
+  //       settings: {
+  //         slidesToShow: 1,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 425, // Small mobile
+  //       settings: {
+  //         slidesToShow: 1,
+  //       },
+  //     },
+  //   ],
+  // };
+
   const sliderSettings = {
-    autoplay: true,
     dots: false,
     infinite: true,
+    autoplay: true,
     autoplaySpeed: 2500,
     speed: 1000,
-    slidesToShow: 5, // Default for desktop
+    slidesToShow: 5,
     slidesToScroll: 1,
+    arrows: false,
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 1 },
-      },
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
+      { breakpoint: 425, settings: { slidesToShow: 1 } },
     ],
   };
 
@@ -136,25 +203,24 @@ const VideosImage = ({ videoId }) => {
     }
   }, [loading, videoId, data.videos]);
 
-   const [object, setObject] = useState({});
+  const [object, setObject] = useState({});
 
-   useEffect(() => {
-     if (!data?.videos || !videoId) return;
+  useEffect(() => {
+    if (!data?.videos || !videoId) return;
 
-     const foundObj = data.videos.find((img) => img.id === videoId);
-     const index = data.videos.findIndex((img) => img.id === videoId);
+    const foundObj = data.videos.find((img) => img.id === videoId);
+    const index = data.videos.findIndex((img) => img.id === videoId);
 
-     if (foundObj) setObject(foundObj);
-     if (index !== -1) setCurrentIndex(index);
-   }, [data, videoId]);
+    if (foundObj) setObject(foundObj);
+    if (index !== -1) setCurrentIndex(index);
+  }, [data, videoId]);
 
-   useEffect(() => {
-     if (object?.video) {
-       const videoUrl = `${pb.files.getURL(object, object.video)}?thumb=1024x0`;
-       setVideoOpen(videoUrl);
-     }
-   }, [object, videoId]);
-
+  useEffect(() => {
+    if (object?.video) {
+      const videoUrl = `${pb.files.getURL(object, object.video)}?thumb=1024x0`;
+      setVideoOpen(videoUrl);
+    }
+  }, [object, videoId]);
 
   if (loading)
     return (
@@ -182,7 +248,7 @@ const VideosImage = ({ videoId }) => {
         <img className="w-full" src={data.banners[0]} alt={data.banners.page} />
       </div> */}
       {/* Gallery */}
-      <div className="mt-16 pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <div className="mt-16 pt-10 max-w-7xl mx-auto py-2">
         <h2 className="text-[#152768] text-2xl font-bold text-center">
           GALLERY
         </h2>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import NavBar from "@/components/shared/NavBar";
 import Footer from "../../footer/page";
 import dynamic from "next/dynamic"; // ⬅️ add this
@@ -23,6 +23,7 @@ const GalleryImage = ({ imageId }) => {
 
   const [videoOpen, setVideoOpen] = useState("");
   const [videoFade, setVideoFade] = useState(false);
+  const sliderRef = useRef(null);
 
   // Trigger fade when image modal opens
   useEffect(() => {
@@ -76,16 +77,32 @@ const GalleryImage = ({ imageId }) => {
     infinite: true,
     autoplaySpeed: 2500,
     speed: 1000,
-    slidesToShow: 5, // Default for desktop
+    // slidesToShow: 5, // Large Desktop
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
+        breakpoint: 992, // Tablet landscape
+        settings: {
+          slidesToShow: 2,
+        },
       },
       {
-        breakpoint: 768,
-        settings: { slidesToShow: 1 },
+        breakpoint: 768, // Tablet portrait
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 576, // Large mobile
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 425, // Small mobile
+        settings: {
+          slidesToShow: 1,
+        },
       },
     ],
   };
@@ -264,69 +281,268 @@ const GalleryImage = ({ imageId }) => {
         </div>
 
         {galactive == "img" ? (
-          <div className="flex">
-            {/* Prev Button */}
-            <button onClick={handleGalleryPrev}>
-              <ChevronLeft
-                size={64}
-                className={`text-black rounded-r-lg ${
-                  currentPage < 2 ? "opacity-50" : "cursor-pointer"
-                }`}
-              />
-            </button>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {!data?.images || data.images.length === 0 ? (
-                <p>Loading images...</p>
-              ) : (
-                <>
-                  {currentImages.map((image) => (
-                    <div
-                      key={image.id}
-                      id={image.id}
-                      className="flex items-center justify-center"
-                    >
-                      <img
-                        src={pb.files.getURL(image, image.image)}
-                        className={`object-cover w-64 h-64 hover:cursor-pointer ${
-                          imageId === image.id ? "" : "hover:scale-102"
-                        }`}
-                        alt="preview"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setCurrentIndex(
-                            data.images.findIndex((img) => img.id === image.id)
-                          );
-                          setImgOpen(
-                            `${pb.files.getURL(
-                              image,
-                              image.image
-                            )}?thumb=1024x0`
-                          );
-                        }}
-                      />
-                    </div>
-                  ))}
+          // <>
+          //   <div className="hidden lg:flex">
+          //     {/* Prev Button */}
+          //     <button onClick={handleGalleryPrev}>
+          //       <ChevronLeft
+          //         size={64}
+          //         className={`text-black rounded-r-lg ${
+          //           currentPage < 2 ? "opacity-50" : "cursor-pointer"
+          //         }`}
+          //       />
+          //     </button>
+          //     <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          //       {!data?.images || data.images.length === 0 ? (
+          //         <p>Loading images...</p>
+          //       ) : (
+          //         <>
+          //           {currentImages.map((image) => (
+          //             <div
+          //               key={image.id}
+          //               id={image.id}
+          //               className="flex items-center justify-center"
+          //             >
+          //               <img
+          //                 src={pb.files.getURL(image, image.image)}
+          //                 className={`object-cover w-64 h-64 hover:cursor-pointer ${
+          //                   imageId === image.id ? "" : "hover:scale-102"
+          //                 }`}
+          //                 alt="preview"
+          //                 onClick={(e) => {
+          //                   e.stopPropagation();
+          //                   setCurrentIndex(
+          //                     data.images.findIndex(
+          //                       (img) => img.id === image.id
+          //                     )
+          //                   );
+          //                   setImgOpen(
+          //                     `${pb.files.getURL(
+          //                       image,
+          //                       image.image
+          //                     )}?thumb=1024x0`
+          //                   );
+          //                 }}
+          //               />
+          //             </div>
+          //           ))}
 
-                  {/* Fill empty slots if fewer than 8 images */}
-                  {Array.from({ length: 8 - currentImages.length }).map(
-                    (_, i) => (
-                      <div key={i} className="flex items-center justify-center">
-                        <div className={`object-cover w-64 h-64`}></div>
+          //           {/* Fill empty slots if fewer than 8 images */}
+          //           {Array.from({ length: 8 - currentImages.length }).map(
+          //             (_, i) => (
+          //               <div
+          //                 key={i}
+          //                 className="flex items-center justify-center"
+          //               >
+          //                 <div className={`object-cover w-64 h-64`}></div>
+          //               </div>
+          //             )
+          //           )}
+          //         </>
+          //       )}
+          //     </div>
+          //     {/* Next Button */}
+          //     <button onClick={handleGalleryNext}>
+          //       <ChevronRight
+          //         size={64}
+          //         className={`text-black rounded-r-lg ${
+          //           currentPage >= totalPages ? "opacity-50" : "cursor-pointer"
+          //         }`}
+          //       />
+          //     </button>
+          //   </div>
+          //   <div className="flex lg:hidden items-center justify-center w-full gap-2 mt-6">
+          //     {/* Prev Button */}
+          //     <button onClick={() => sliderRef?.current?.slickPrev()}>
+          //       <ChevronLeft
+          //         size={48}
+          //         className="text-black hover:scale-110 transition-transform cursor-pointer"
+          //       />
+          //     </button>
+
+          //     {/* Slider */}
+          //     <div className="w-[90%]">
+          //       {!data?.images || data.images.length === 0 ? (
+          //         <p className="text-center">Loading images...</p>
+          //       ) : (
+          //         <Slider {...sliderSettings}>
+          //           {data.images.map((image) => (
+          //             <div
+          //               key={image.id}
+          //               id={image.id}
+          //               className="flex items-center justify-center px-2"
+          //             >
+          //               <img
+          //                 src={pb.files.getURL(image, image.image)}
+          //                 alt="preview"
+          //                 className={`object-cover w-64 h-64 rounded-xl transition-transform duration-300 ${
+          //                   imageId === image.id
+          //                     ? "scale-100"
+          //                     : "hover:scale-105"
+          //                 }`}
+          //                 onClick={(e) => {
+          //                   e.stopPropagation();
+          //                   setCurrentIndex(
+          //                     data.images.findIndex(
+          //                       (img) => img.id === image.id
+          //                     )
+          //                   );
+          //                   setImgOpen(
+          //                     `${pb.files.getURL(
+          //                       image,
+          //                       image.image
+          //                     )}?thumb=1024x0`
+          //                   );
+          //                 }}
+          //               />
+          //             </div>
+          //           ))}
+          //         </Slider>
+          //       )}
+          //     </div>
+
+          //     {/* Next Button */}
+          //     <button onClick={() => sliderRef?.current?.slickNext()}>
+          //       <ChevronRight
+          //         size={48}
+          //         className="text-black hover:scale-110 transition-transform cursor-pointer"
+          //       />
+          //     </button>
+          //   </div>
+          // </>
+          <div>
+            {/* ✅ Desktop & Laptop View (Grid, visible from md and up) */}
+            <div className="hidden lg:flex">
+              {/* Prev Button */}
+              <button onClick={handleGalleryPrev}>
+                <ChevronLeft
+                  size={64}
+                  className={`text-black rounded-r-lg ${
+                    currentPage < 2 ? "opacity-50" : "cursor-pointer"
+                  }`}
+                />
+              </button>
+
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {!data?.images || data.images.length === 0 ? (
+                  <p>Loading images...</p>
+                ) : (
+                  <>
+                    {currentImages.map((image) => (
+                      <div
+                        key={image.id}
+                        id={image.id}
+                        className="flex items-center justify-center"
+                      >
+                        <img
+                          src={pb.files.getURL(image, image.image)}
+                          className={`object-cover w-64 h-64 hover:cursor-pointer ${
+                            imageId === image.id ? "" : "hover:scale-102"
+                          }`}
+                          alt="preview"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentIndex(
+                              data.images.findIndex(
+                                (img) => img.id === image.id
+                              )
+                            );
+                            setImgOpen(
+                              `${pb.files.getURL(
+                                image,
+                                image.image
+                              )}?thumb=1024x0`
+                            );
+                          }}
+                        />
                       </div>
-                    )
-                  )}
-                </>
-              )}
+                    ))}
+
+                    {/* Fill empty slots if fewer than 8 images */}
+                    {Array.from({ length: 8 - currentImages.length }).map(
+                      (_, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-center"
+                        >
+                          <div className="object-cover w-64 h-64"></div>
+                        </div>
+                      )
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Next Button */}
+              <button onClick={handleGalleryNext}>
+                <ChevronRight
+                  size={64}
+                  className={`text-black rounded-r-lg ${
+                    currentPage >= totalPages ? "opacity-50" : "cursor-pointer"
+                  }`}
+                />
+              </button>
             </div>
-            {/* Next Button */}
-            <button onClick={handleGalleryNext}>
-              <ChevronRight
-                size={64}
-                className={`text-black rounded-r-lg ${
-                  currentPage >= totalPages ? "opacity-50" : "cursor-pointer"
-                }`}
-              />
-            </button>
+
+            {/* ✅ Mobile & Tablet View (Slider, visible below md) */}
+            <div className="flex lg:hidden items-center justify-center mt-6">
+              {/* Prev Button */}
+              <button onClick={() => current?.slickPrev()}>
+                <ChevronLeft
+                  size={48}
+                  className="text-black hover:scale-110 transition-transform cursor-pointer"
+                />
+              </button>
+
+              {/* Slider */}
+              <div className="w-[85%]">
+                {!data?.images || data.images.length === 0 ? (
+                  <p className="text-center">Loading images...</p>
+                ) : (
+                  <Slider {...sliderSettings}>
+                    {data.images.map((image) => (
+                      <div
+                        key={image.id}
+                        id={image.id}
+                        className="flex items-center justify-center px-"
+                      >
+                        <img
+                          src={pb.files.getURL(image, image.image)}
+                          alt="preview"
+                          className={`object-cover w-80 h-64 rounded-xl transition-transform duration-300 ${
+                            imageId === image.id
+                              ? "scale-100"
+                              : "hover:scale-105"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentIndex(
+                              data.images.findIndex(
+                                (img) => img.id === image.id
+                              )
+                            );
+                            setImgOpen(
+                              `${pb.files.getURL(
+                                image,
+                                image.image
+                              )}?thumb=1024x0`
+                            );
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                )}
+              </div>
+
+              {/* Next Button */}
+              <button onClick={() => sliderRef?.current?.slickNext()}>
+                <ChevronRight
+                  size={48}
+                  className="text-black hover:scale-110 transition-transform cursor-pointer"
+                />
+              </button>
+            </div>
           </div>
         ) : galactive == "vid" ? (
           <>
