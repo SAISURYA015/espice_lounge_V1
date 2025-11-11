@@ -21,64 +21,105 @@ const Home = () => {
     videos: [],
   });
 
-  // const sliderSettings = {
-  //   autoplay: true,
-  //   dots: false,
-  //   infinite: true,
-  //   autoplaySpeed: 2500,
-  //   speed: 1000,
-  //   // slidesToShow: 1, // Default for desktop
-  //   slidesToScroll: 1,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1024,
-  //       settings: { slidesToShow: 2 },
-  //     },
-  //     {
-  //       breakpoint: 768,
-  //       settings: { slidesToShow: 1 },
-  //     },
-  //   ],
-  // };
 
-   const sliderSettings = {
-     autoplay: true,
-     dots: false,
-     infinite: true,
-     autoplaySpeed: 2500,
-     speed: 1000,
-     // slidesToShow: 5, // Large Desktop
-     slidesToScroll: 1,
-     responsive: [
-       {
-         breakpoint: 992, // Tablet landscape
-         settings: {
-           slidesToShow: 2,
-         },
-       },
-       {
-         breakpoint: 768, // Tablet portrait
-         settings: {
-           slidesToShow: 2,
-         },
-       },
-       {
-         breakpoint: 576, // Large mobile
-         settings: {
-           slidesToShow: 1,
-         }, 
-       },
-       {
-         breakpoint: 425, // Small mobile
-         settings: {
-           slidesToShow: 1,
-         },
-       },
-     ],
-   };
+  const sliderImgSettings = {
+    autoplay: true,
+    dots: false,
+    infinite: true,
+    autoplaySpeed: 2500,
+    speed: 1000,
+    // slidesToShow: 5, // Large Desktop
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024, // Tablet landscape
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 992, // Tablet landscape
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768, // Tablet portrait
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 576, // Large mobile
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 425, // Small mobile
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
+  const sliderVidSettings = {
+    dots: false,
+    infinite: true,
+    speed: 1000,
+    autoplay: true,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    autoplaySpeed: 2500,
+    responsive: [
+      {
+        breakpoint: 3000, // Large desktop and above
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1200, // Desktop & small laptop
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 992, // Tablet landscape
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, // Tablet portrait
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 576, // Large mobile
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 425, // Small mobile
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 
   const [galactive, setGalactive] = useState("img");
-   const sliderRef = useRef(null);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -500,12 +541,12 @@ const Home = () => {
             </div> */}
             {/* ✅ Desktop & Laptop View (Static Grid) */}
             <div className="hidden lg:flex gap-6 items-center justify-center">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
                 {data.images && data.images.length > 0 ? (
                   data.images.slice(0, 8).map((image) => (
                     <div key={image.id}>
                       <a href={`/gallery/images?imageId=${image.id}`}>
-                        <div className="flex items-center justify-center border border-gray-300 rounded-2xl overflow-hidden hover:shadow-md transition-all duration-300">
+                        <div className="flex items-center justify-center border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-all duration-300">
                           <img
                             className="object-cover w-64 h-64 hover:scale-105 transition-transform duration-300"
                             src={pb.files.getURL(image, image.image)}
@@ -544,7 +585,7 @@ const Home = () => {
                 {!data?.images || data.images.length === 0 ? (
                   <p className="text-center">Loading images...</p>
                 ) : (
-                  <Slider ref={sliderRef} {...sliderSettings}>
+                  <Slider ref={sliderRef} {...sliderImgSettings}>
                     {data.images.slice(0, 8).map((image) => (
                       <div
                         key={image.id}
@@ -579,13 +620,13 @@ const Home = () => {
           <>
             <div className="max-w-7xl mt-4">
               {data.videos && data.videos.length > 0 ? (
-                <Slider {...sliderSettings}>
+                <Slider {...sliderVidSettings}>
                   {data.videos.map((video) => (
                     <Link
                       href={`/gallery/videos?videoId=${video.id}`}
                       key={video.id}
                     >
-                      <div key={video.id} className="px-2">
+                      <div key={video.id}>
                         <video
                           className="w-full h-64 object-cover rounded-md hover:scale-105"
                           crossOrigin="anonymous"

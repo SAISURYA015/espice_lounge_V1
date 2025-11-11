@@ -19,6 +19,7 @@ const VideosImage = ({ videoId }) => {
   const [videoOpen, setVideoOpen] = useState("");
   const [videoFade, setVideoFade] = useState(false);
 
+  
   useEffect(() => setVideoFade(!!videoOpen), [videoOpen]);
 
   // Trigger fade when image modal opens
@@ -60,93 +61,6 @@ const VideosImage = ({ videoId }) => {
     setVideoOpen(
       pb.files.getURL(data.videos[newIndex], data.videos[newIndex].video)
     );
-  };
-
-  // const sliderSettings = {
-  //   autoplay: true,
-  //   dots: false,
-  //   infinite: true,
-  //   autoplaySpeed: 2500,
-  //   speed: 1000,
-  //   slidesToShow: 5, // Default for desktop
-  //   slidesToScroll: 1,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1024,
-  //       settings: { slidesToShow: 2 },
-  //     },
-  //     {
-  //       breakpoint: 768,
-  //       settings: { slidesToShow: 1, slidesToShow: 3 },
-  //     },
-  //     {
-  //       breakpoint: 425,
-  //       settings: { slidesToShow: 1, slidesToShow: 1 },
-  //     },
-  //   ],
-  // };
-
-  // const sliderSettings = {
-  //   autoplay: true,
-  //   dots: false,
-  //   infinite: true,
-  //   autoplaySpeed: 2500,
-  //   speed: 1000,
-  //   slidesToShow: 5, // Large Desktop
-  //   slidesToScroll: 1,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1440, // Laptop large
-  //       settings: {
-  //         slidesToShow: 4,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 1200, // Laptop
-  //       settings: {
-  //         slidesToShow: 3,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 992, // Tablet landscape
-  //       settings: {
-  //         slidesToShow: 2,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 768, // Tablet portrait
-  //       settings: {
-  //         slidesToShow: 2,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 576, // Large mobile
-  //       settings: {
-  //         slidesToShow: 1,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 425, // Small mobile
-  //       settings: {
-  //         slidesToShow: 1,
-  //       },
-  //     },
-  //   ],
-  // };
-
-  const sliderSettings = {
-    dots: false,
-    infinite: true,
-    autoplay: true,
-    autoplaySpeed: 2500,
-    speed: 1000,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    arrows: false,
-    responsive: [
-      { breakpoint: 768, settings: { slidesToShow: 1 } },
-      { breakpoint: 425, settings: { slidesToShow: 1 } },
-    ],
   };
 
   const [galactive, setGalactive] = useState("vid");
@@ -221,6 +135,61 @@ const VideosImage = ({ videoId }) => {
       setVideoOpen(videoUrl);
     }
   }, [object, videoId]);
+
+
+  const sliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 1000,
+    autoplay: true,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    autoplaySpeed: 2500,
+    responsive: [
+      {
+        breakpoint: 3000, // Large desktop and above
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1200, // Desktop & small laptop
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 992, // Tablet landscape
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, // Tablet portrait
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 576, // Large mobile
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 425, // Small mobile
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 
   if (loading)
     return (
@@ -333,7 +302,7 @@ const VideosImage = ({ videoId }) => {
           </>
         ) : galactive == "vid" ? (
           <>
-            <div className="mt-6 max-w-7xl">
+            <div className="mt-6 max-w-7xl px-4 lg:px-0">
               {data.videos && data.videos.length > 0 ? (
                 <Slider {...sliderSettings}>
                   {data.videos.map((video) => (

@@ -81,6 +81,12 @@ const GalleryImage = ({ imageId }) => {
     slidesToScroll: 1,
     responsive: [
       {
+        breakpoint: 1024, // laptop
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
         breakpoint: 992, // Tablet landscape
         settings: {
           slidesToShow: 2,
@@ -504,7 +510,7 @@ const GalleryImage = ({ imageId }) => {
                       <div
                         key={image.id}
                         id={image.id}
-                        className="flex items-center justify-center px-"
+                        className="flex items-center justify-center"
                       >
                         <img
                           src={pb.files.getURL(image, image.image)}
@@ -810,7 +816,6 @@ const GalleryImage = ({ imageId }) => {
           </div>
         </div>
       )}
-
       <Footer />
     </div>
   );
