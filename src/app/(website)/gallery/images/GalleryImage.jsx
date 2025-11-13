@@ -785,8 +785,11 @@ const GalleryImage = ({ imageId }) => {
           >
             {/* Prev Button */}
             <button
-              onClick={handlePrev}
-              className="absolute left-0 top-1/2 -translate-y-1/2 text-white px-3 py-2 rounded-r-lg cursor-pointer"
+              onClick={currentIndex > 0 ? handlePrev : () => {}}
+              // className="absolute left-0 top-1/2 -translate-y-1/2 text-white px-3 py-2 rounded-r-lg cursor-pointer"
+              className={`absolute left-0 top-1/2 -translate-y-1/2 text-white px-3 py-2 rounded-r-lg cursor-pointer ${
+                currentIndex > 0 ? "cursor-pointer" : "opacity-50"
+              }`}
             >
               <ChevronLeft size={64} />
             </button>
@@ -800,8 +803,15 @@ const GalleryImage = ({ imageId }) => {
 
             {/* Next Button */}
             <button
-              onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 text-white px-3 py-2 rounded-l-lg cursor-pointer"
+              onClick={
+                currentIndex < data.images.length - 1 ? handleNext : () => {}
+              }
+              // className="absolute right-0 top-1/2 -translate-y-1/2 text-white px-3 py-2 rounded-l-lg cursor-pointer"
+              className={`absolute right-0 top-1/2 -translate-y-1/2 text-white px-3 py-2 rounded-l-lg cursor-pointer  ${
+                currentIndex < data.images.length - 1
+                  ? "cursor-pointer"
+                  : "opacity-50"
+              }`}
             >
               <ChevronRight size={64} />
             </button>

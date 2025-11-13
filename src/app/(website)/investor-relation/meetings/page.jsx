@@ -107,7 +107,10 @@ const Meetings = () => {
                     {Array.isArray(info.files) && info.files.length > 0 ? (
                       [...info.files].reverse().map((file, idx) => {
                         const fileUrl = pb.files.getURL(info, file);
-                        const displayName = formatFileName(file);
+                        const displayName = formatFileName(file)
+                          .split(" ")
+                          .slice(0, -1)
+                          .join(" ");
 
                         return (
                           <div
