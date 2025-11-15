@@ -786,7 +786,6 @@ const Home = () => {
                         ) : (
                           <></>
                         )}
-
                         {brand.swiggy ? (
                           <a href={brand?.swiggy} target="_blank">
                             <img

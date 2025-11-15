@@ -107,10 +107,10 @@ const Meetings = () => {
                     {Array.isArray(info.files) && info.files.length > 0 ? (
                       [...info.files].reverse().map((file, idx) => {
                         const fileUrl = pb.files.getURL(info, file);
-                        const displayName = formatFileName(file)
-                          .split(" ")
-                          .slice(0, -1)
-                          .join(" ");
+                        // const displayName = formatFileName(file)
+                        //   .split(" ")
+                        //   .slice(0, -1)
+                        //   .join(" ");
 
                         return (
                           <div
@@ -118,7 +118,20 @@ const Meetings = () => {
                             className="flex justify-between items-center bg-white p-2 rounded-md border"
                           >
                             <p className="text-gray-800 text-sm sm:text-base">
-                              {displayName}
+                              {fileUrl
+                                .split("/")
+                                .pop()
+                                .split("_")
+                                .slice(0, -4).map((word) =>
+                                  word.charAt(0).toUpperCase() + word.slice(1)
+                                )
+                                .join(" ") + " " +
+                                fileUrl
+                                  .split("/")
+                                  .pop()
+                                  .split("_")
+                                  .slice(-4, -1)
+                                  .join("-")}
                             </p>
                             <a
                               href={fileUrl}
